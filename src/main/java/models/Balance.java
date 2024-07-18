@@ -16,4 +16,12 @@ public class Balance {
     public Double getAmountToReceive() {
         return amountToReceive;
     }
+
+    public void setAmountOwed(Double amountOwed) {
+        this.amountOwed = amountOwed;
+    }
+
+    public void setAmountToReceive(Double amountToReceive) {
+        this.amountToReceive = amountToReceive;
+    }
 }

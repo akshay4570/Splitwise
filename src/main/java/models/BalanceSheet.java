@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class BalanceSheet {
     private UUID balanceSheetId;
-    private Map<String, Balance> mapUserBalance;
+    private Map<User, Balance> mapUserBalance;
     private Double totalPersonalExpense;
     private Double totalPayment;
     private Double totalOwed;
@@ -21,11 +21,11 @@ public class BalanceSheet {
         this.totalToReceive = 0.0;
     }
 
-    public Map<String, Balance> getMapUserBalance() {
+    public Map<User, Balance> getMapUserBalance() {
         return mapUserBalance;
     }
 
-    public void setMapUserBalance(Map<String, Balance> mapUserBalance) {
+    public void setMapUserBalance(Map<User, Balance> mapUserBalance) {
         this.mapUserBalance = mapUserBalance;
     }
 

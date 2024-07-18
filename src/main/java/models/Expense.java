@@ -20,4 +20,24 @@ public class Expense {
         this.expensePaidByUser = expensePaidByUser;
         this.listSplit.addAll(listSplit);
     }
+
+    public String getExpenseName() {
+        return expenseName;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public SplitType getSplitType() {
+        return splitType;
+    }
+
+    public User getExpensePaidByUser() {
+        return expensePaidByUser;
+    }
+
+    public List<Split> getListSplit() {
+        return listSplit;
+    }
 }

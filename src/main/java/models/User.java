@@ -17,6 +17,10 @@ public class User {
         return balanceSheet;
     }
 
+    public void setBalanceSheet(BalanceSheet balanceSheet) {
+        this.balanceSheet = balanceSheet;
+    }
+
     public UUID getUserId() {
         return userId;
     }
