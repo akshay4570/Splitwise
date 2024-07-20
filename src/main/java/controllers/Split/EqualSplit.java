@@ -9,7 +9,7 @@ public class EqualSplit implements ExpenseSplit{
     public boolean validateSplit(List<Split> listSplit, Double totalAmount) {
         Double amount = totalAmount/listSplit.size();
         for(Split split : listSplit){
-            if(split.getAmountOwed() != amount){
+            if(Double.compare(split.getAmountOwed(), amount) != 0){
                 return false;
             }
         }

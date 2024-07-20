@@ -17,6 +17,14 @@ public class GroupDAO {
         this.mapUserDetails = new HashMap<>();
     }
 
+    public List<Group> getListGroups() {
+        return listGroups;
+    }
+
+    public Map<UUID, List<User>> getMapUserDetails() {
+        return mapUserDetails;
+    }
+
     public DBResponse addGroupToDB(Group group){
         try {
             listGroups.add(group);
@@ -80,5 +88,13 @@ public class GroupDAO {
             dbResponse = DBResponse.FAILURE;
         }
         return dbResponse;
+    }
+
+    @Override
+    public String toString() {
+        return "GroupDAO{" +
+                "listGroups=" + listGroups +
+                ", mapUserDetails=" + mapUserDetails +
+                '}';
     }
 }

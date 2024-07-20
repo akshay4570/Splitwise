@@ -35,6 +35,7 @@ public class Group {
         return listExpense;
     }
 
+
     public void setListUsers(List<User> listUsers) {
         this.listUsers = listUsers;
     }

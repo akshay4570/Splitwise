@@ -40,6 +40,9 @@ public class GroupController {
     public void addUsersToGroup(Group group, List<User> listUsers){
         if(group != null && !listUsers.isEmpty()){
             dbResponse = groupDAO.insertUsersToGroup(group.getGroupId(), listUsers);
+            if(dbResponse.equals(DBResponse.SUCCESS)){
+                group.setListUsers(listUsers);
+            }
         }
         displayMessageUsers(group, "Insertion");
     }
@@ -90,8 +93,17 @@ public class GroupController {
     }
 
     public void addGroupExpense(Group group, String expenseName, Double amount, SplitType splitType, User expensePaidByUser, List<Split> listSplit){
-        Expense expense = expenseController.createExpense(group, expenseName, amount, splitType,  expensePaidByUser, listSplit);
-        group.setListExpense(Collections.singletonList(expense));
+        expenseController.createExpense(group, expenseName, amount, splitType,  expensePaidByUser, listSplit);
     }
 
+    public Optional<Group> getGroupNameFromGroup(String groupName){
+        return groupDAO.getListGroups()
+                .stream()
+                .filter(obj -> obj.getGroupName().equals(groupName))
+                .findAny();
+    }
+
+    public void displayGroupDetails() {
+        System.out.println(groupDAO.getListGroups());
+    }
 }

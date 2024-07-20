@@ -49,4 +49,14 @@ public class UserController {
             System.out.println(dmlOperation + " of Users Failed");
         }
     }
+
+    public void getListUsers(){
+        System.out.println(userDAO.getListUsers());
+    }
+    public List<User> getUsersFromUserNames(Set<String> setUserName) {
+        return userDAO.getListUsers()
+                .stream()
+                .filter(obj -> setUserName.contains(obj.getUserName()))
+                .collect(Collectors.toList());
+    }
 }

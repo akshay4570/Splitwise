@@ -18,6 +18,7 @@ public class BalanceSheetController {
     }
     public void recalculateBalance(Group group){
         List<Expense> listExpense = group.getListExpense();
+        System.out.println("List Expense " +listExpense);
         List<User> listUsers = group.getListUsers();
         for(Expense objExpense : listExpense){
             User expensePaidUser = objExpense.getExpensePaidByUser();
@@ -30,11 +31,11 @@ public class BalanceSheetController {
                 }else{
                     mapTotalPersonalExpense.put(currentUser, split.getAmountOwed());
                 }
-                if(currentUser == expensePaidUser){
+                if(currentUser.getUserId().equals(expensePaidUser.getUserId())){
                     if(mapTotalPaymentDoneByUser.containsKey((currentUser))){
-                        mapTotalPaymentDoneByUser.put(currentUser, mapTotalPaymentDoneByUser.get(currentUser) + split.getAmountOwed());
+                        mapTotalPaymentDoneByUser.put(currentUser, mapTotalPaymentDoneByUser.get(currentUser) + amount);
                     }else{
-                        mapTotalPaymentDoneByUser.put(currentUser, split.getAmountOwed());
+                        mapTotalPaymentDoneByUser.put(currentUser, amount);
                     }
                     if(mapUserBalance.containsKey(currentUser)){
                         balance = mapUserBalance.get(currentUser);
@@ -54,14 +55,24 @@ public class BalanceSheetController {
                 }
             }
         }
+        System.out.println("Map Balance "+mapUserBalance);
         for(User user : listUsers){
             BalanceSheet balanceSheet = new BalanceSheet();
             balanceSheet.setMapUserBalance(mapUserBalance);
-            balanceSheet.setTotalPayment(mapTotalPaymentDoneByUser.get(user));
-            balanceSheet.setTotalPersonalExpense(mapTotalPersonalExpense.get(user));
-            balanceSheet.setTotalOwed(mapUserBalance.get(user).getAmountOwed());
-            balanceSheet.setTotalToReceive(mapUserBalance.get(user).getAmountToReceive());
+            if(mapTotalPaymentDoneByUser.containsKey(user)) {
+                balanceSheet.setTotalPayment(mapTotalPaymentDoneByUser.get(user));
+            }
+            if(mapTotalPersonalExpense.containsKey(user)){
+                balanceSheet.setTotalPersonalExpense(mapTotalPersonalExpense.get(user));
+            }
+            if(mapUserBalance.containsKey(user)) {
+                balanceSheet.setTotalOwed(mapUserBalance.get(user).getAmountOwed());
+            }
+            if(mapUserBalance.containsKey((user))) {
+                balanceSheet.setTotalToReceive(mapUserBalance.get(user).getAmountToReceive());
+            }
             user.setBalanceSheet(balanceSheet);
+            System.out.println(user.getBalanceSheet());
         }
     }
     public void displayUserBalanceSheet(User user){
@@ -69,15 +80,28 @@ public class BalanceSheetController {
         BalanceSheet balanceSheet = user.getBalanceSheet();
 
         System.out.println("==============================================================================================================================================================");
-        System.out.println("Total Payment Done by the User " + user.getUserName() + " Rs" + balanceSheet.getTotalPayment());
-        System.out.println("Total Personal Expenditure by the User " + user.getUserName() + " Rs" + balanceSheet.getTotalPersonalExpense());
-        System.out.println("Total Amount Owed by the User " + user.getUserName() + " Rs" + balanceSheet.getTotalOwed());
-        System.out.println("Total Amount Yet to be Received by the User " + user.getUserName() + " Rs" + balanceSheet.getTotalToReceive());
-        for(User objUser: balanceSheet.getMapUserBalance().keySet()){
-            Balance balance = balanceSheet.getMapUserBalance().get(objUser);
-            System.out.println("User with Username "+objUser.getUserName());
+        System.out.println("Total Payment Done by the User " + user.getUserName() + " Rs " + balanceSheet.getTotalPayment());
+        System.out.println("Total Personal Expenditure by the User " + user.getUserName() + " Rs " + balanceSheet.getTotalPersonalExpense());
+        System.out.println("Total Amount Owed by the User " + user.getUserName() + " Rs " + balanceSheet.getTotalOwed());
+        System.out.println("Total Amount Yet to be Received by the User " + user.getUserName() + " Rs " + balanceSheet.getTotalToReceive());
+
+        Balance balance = balanceSheet.getMapUserBalance().get(user);
+        System.out.println("User with Username "+user.getUserName());
+        System.out.println("You get back : Rs "+balance.getAmountToReceive());
+        System.out.println("You Owe : Rs "+balance.getAmountOwed());
+
+        System.out.println("==============================================================================================================================================================");
+    }
+
+    public void displayGroupBalanceSheet(Group group){
+        System.out.println("Details of Balance of all Users of the Group "+group.getGroupName());;
+        List<User> listUser = group.getListUsers();
+        System.out.println("==============================================================================================================================================================");
+        for(User user : listUser){
+            Balance balance = user.getBalanceSheet().getMapUserBalance().get(user);
+            System.out.println("User with Username "+user.getUserName());
             System.out.println("You get back : Rs "+balance.getAmountToReceive());
-            System.out.println("You Owe : Rs "+balance.getAmountToReceive());
+            System.out.println("You Owe : Rs "+balance.getAmountOwed());
         }
         System.out.println("==============================================================================================================================================================");
     }

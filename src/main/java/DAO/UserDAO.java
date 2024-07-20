@@ -13,6 +13,10 @@ public class UserDAO {
         this.listUsers = new ArrayList<>();
     }
 
+    public List<User> getListUsers() {
+        return listUsers;
+    }
+
     public DBResponse insertUserToDB(List<User> listUser){
         try {
             listUsers.addAll(listUser);
@@ -47,5 +51,12 @@ public class UserDAO {
             dbResponse = DBResponse.FAILURE;
         }
         return dbResponse;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDAO{" +
+                "listUsers=" + listUsers +
+                '}';
     }
 }
