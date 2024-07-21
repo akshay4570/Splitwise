@@ -2,10 +2,7 @@ package controllers;
 
 import models.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BalanceSheetController {
@@ -13,12 +10,14 @@ public class BalanceSheetController {
     private Map<User, Double> mapTotalPersonalExpense;
     private Map<User, Double> mapTotalPaymentDoneByUser;
     private Map<User, List<PaymentGraph> >mapUserAmountOwed;
+    private List<Integer> cache;
 
     public BalanceSheetController(){
         mapUserBalance = new HashMap<>();
         mapTotalPersonalExpense = new HashMap<>();
         mapTotalPaymentDoneByUser = new HashMap<>();
         mapUserAmountOwed = new HashMap<>();
+        cache = new ArrayList<>();
     }
     public void recalculateBalance(Group group){
         List<Expense> listExpense = group.getListExpense();
@@ -154,6 +153,7 @@ public class BalanceSheetController {
             list2D.add(listInner);
         }
         System.out.println("List 2D " + list2D.toString());
+        cache = new ArrayList<>(Collections.nCopies(list2D.size()+1, -1));
         Integer minTransactions = dfs(list2D, 0, listGraph);
         System.out.println("Total Transactions are reduced to "+minTransactions);
         return listGraph;
@@ -162,8 +162,14 @@ public class BalanceSheetController {
     private Integer dfs(List<List<Object>> list2D, int i, List<List<Object>> listGraph) {
         if(list2D.isEmpty() || i >= list2D.size()) return  0;
 
+        if(cache.get(i) != -1){
+            return cache.get(i);
+        }
+
         if(Double.compare(Double.valueOf(list2D.get(i).get(1).toString()),0.0) == 0 ){
-            return dfs(list2D, i+1, listGraph);
+            Integer val = dfs(list2D, i+1, listGraph);
+            cache.set(i, val);
+            return val;
         }
 
         Double currentVal = Double.valueOf(list2D.get(i).get(1).toString());
@@ -173,18 +179,24 @@ public class BalanceSheetController {
             Double nextVal = Double.valueOf(list2D.get(j).get(1).toString());
             if(Double.compare(currentVal * nextVal, 0.0) == -1){
                 list2D.get(j).set(1, currentVal + nextVal);
-                if(Double.compare(nextVal, 0) == -1){
-                    listGraph.add(List.of(list2D.get(j).get(0),list2D.get(i).get(0), Math.abs(nextVal)));
-                }else{
-                    listGraph.add(List.of(list2D.get(i).get(0),list2D.get(j).get(0), Math.abs(currentVal)));
+
+                int val = 1 + dfs(list2D, i+1, listGraph);
+                if(val < minTransaction){
+                    minTransaction = val;
+                    if(Double.compare(nextVal, 0) == -1){
+                        listGraph.add(List.of(list2D.get(j).get(0),list2D.get(i).get(0), Math.abs(nextVal)));
+                    }else{
+                        listGraph.add(List.of(list2D.get(i).get(0),list2D.get(j).get(0), Math.abs(currentVal)));
+                    }
                 }
-                minTransaction = Math.min(minTransaction, 1 + dfs(list2D, i+1, listGraph));
+//                minTransaction = Math.min(minTransaction, 1 + dfs(list2D, i+1, listGraph));
                 list2D.get(j).set(1, nextVal);
                 if(Double.compare(currentVal + nextVal, 0.0) == 0){
                     break;
                 }
             }
         }
+        cache.set(i, minTransaction);
         return minTransaction;
     }
 }
