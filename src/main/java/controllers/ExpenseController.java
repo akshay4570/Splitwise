@@ -4,6 +4,8 @@ import DAO.ExpenseDAO;
 import controllers.Split.ExpenseSplit;
 import models.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class ExpenseController {
             expense = new Expense(expenseName, amount, splitType, expensePaidByUser, listSplit);
             dbResponse = expenseDAO.addNewExpenseToDB(group.getGroupId(), expense);
             printDBResonse(dbResponse, group.getGroupName());
-            group.setListExpense(Collections.singletonList(expense));
+            group.setListExpense(new ArrayList<>(Arrays.asList(expense)));
             balanceSheetController.recalculateBalance(group);
         }else{
             throw new IllegalStateException("Verify the Split Type");

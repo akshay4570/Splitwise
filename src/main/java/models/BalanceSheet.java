@@ -1,8 +1,6 @@
 package models;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class BalanceSheet {
     private UUID balanceSheetId;
@@ -11,6 +9,7 @@ public class BalanceSheet {
     private Double totalPayment;
     private Double totalOwed;
     private Double totalToReceive;
+    private List<PaymentGraph> listUserOwed;
 
     public BalanceSheet() {
         this.balanceSheetId = UUID.randomUUID();
@@ -19,6 +18,7 @@ public class BalanceSheet {
         this.totalPayment = 0.0;
         this.totalOwed = 0.0;
         this.totalToReceive = 0.0;
+        this.listUserOwed = new ArrayList<>();
     }
 
     public Map<User, Balance> getMapUserBalance() {
@@ -61,6 +61,14 @@ public class BalanceSheet {
         this.totalToReceive = totalToReceive;
     }
 
+    public List<PaymentGraph> getListUserOwed() {
+        return listUserOwed;
+    }
+
+    public void setListUserOwed( List<PaymentGraph> listUserOwed) {
+        this.listUserOwed = listUserOwed;
+    }
+
     @Override
     public String toString() {
         return "BalanceSheet{" +
@@ -70,6 +78,7 @@ public class BalanceSheet {
                 ", totalPayment=" + totalPayment +
                 ", totalOwed=" + totalOwed +
                 ", totalToReceive=" + totalToReceive +
+                ", listUserOwed=" + listUserOwed +
                 '}';
     }
 }

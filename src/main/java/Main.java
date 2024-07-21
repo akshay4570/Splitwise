@@ -145,7 +145,7 @@ public class Main {
     private static void setupDB(List<User> listUser) {
         for(int i=0;i<10;i++){
             Faker faker = new Faker();
-            User user = new User(faker.name().fullName());
+            User user = new User(faker.name().firstName());
             listUser.add(user);
         }
 

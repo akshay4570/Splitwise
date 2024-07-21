@@ -23,10 +23,12 @@ public class ExpenseDAO {
             if(mapGroupExpense.containsKey(groupId)){
                 mapGroupExpense.get(groupId).add(expense);
             }else{
-                mapGroupExpense.put(groupId, Collections.singletonList(expense));
+                mapGroupExpense.put(groupId, new ArrayList<>(Arrays.asList(expense)));
             }
+            System.out.println("Map "+mapGroupExpense);
             dbResponse = DBResponse.SUCCESS;
         }catch (Exception e){
+            System.out.println("Exception" +e.getMessage());
             dbResponse = DBResponse.FAILURE;
         }
         return dbResponse;
